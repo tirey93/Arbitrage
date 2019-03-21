@@ -1,0 +1,100 @@
+lip 21, 2018 8:23:20 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+xlm 00:00.021
+qlc 00:00.019
+
+lip 21, 2018 8:25:13 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+xlm 01:52.645
+qlc 01:52.643
+cbc 00:00.007
+qtum 00:00.006
+
+lip 21, 2018 8:26:43 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+xlm 03:23.049
+qlc 03:23.047
+cbc 01:30.411
+qtum 01:30.410
+
+lip 21, 2018 8:27:54 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+xlm 04:33.886
+qlc 04:33.884
+cbc 02:41.248
+qtum 02:41.247
+
+lip 21, 2018 8:29:16 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+xlm 05:55.684
+qlc 05:55.682
+cbc 04:03.046
+qtum 04:03.045
+
+lip 21, 2018 8:30:38 PM Markets.MarketCalculator displayTimes
+INFO: Coin: xlm Skad: Binance Do: Kucoin
+01:52.640
+0,09% 0,00% 0,00% 0,00% 0,00% 
+lip 21, 2018 8:30:38 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+qlc 07:18.221
+cbc 05:25.586
+qtum 05:25.585
+
+lip 21, 2018 8:31:52 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+qlc 08:32.078
+cbc 06:39.442
+qtum 06:39.441
+grs 00:00.009
+
+lip 21, 2018 8:33:07 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+qlc 09:47.006
+cbc 07:54.370
+qtum 07:54.369
+grs 01:14.937
+
+lip 21, 2018 8:34:27 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+qlc 11:06.685
+cbc 09:14.049
+qtum 09:14.048
+grs 02:34.616
+
+lip 21, 2018 8:35:39 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+qlc 12:18.759
+cbc 10:26.123
+qtum 10:26.122
+grs 03:46.690
+
+lip 21, 2018 8:36:56 PM Markets.MarketCalculator displayTimes
+INFO: Coin: qtum Skad: Binance Do: Kucoin
+06:39.436
+0,00% 0,00% 0,00% 0,00% 0,00% -0,09% -0,09% -0,09% -0,06% 
+lip 21, 2018 8:36:56 PM Markets.MarketCalculator displayTimes
+INFO: Coin: qlc Skad: Kucoin Do: Binance
+08:32.076
+0,05% 0,07% 0,05% 0,05% 0,05% 0,05% -163,04% 0,00% 0,00% 0,00% 
+lip 21, 2018 8:36:56 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+cbc 11:43.872
+grs 05:04.439
+
+lip 21, 2018 8:38:10 PM Markets.MarketCalculator displayTimes
+INFO: Coin: grs Skad: Bittrex Do: Binance
+01:14.933
+0,06% -0,35% -2,11% 0,00% 0,00% 
+lip 21, 2018 8:38:10 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+cbc 12:57.065
+
+lip 21, 2018 8:39:24 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+cbc 14:11.490
+
+lip 21, 2018 8:40:37 PM Markets.MarketCalculator mainLoop
+INFO: Kolejka:
+cbc 15:24.344
+
