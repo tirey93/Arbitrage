@@ -14,11 +14,16 @@ import java.util.logging.Logger;
 public class MarketCalculator {
 	private Double toSpend = 0.02;
 	public ArrayList<ArbiLine> arbiLines = new ArrayList<>();
+	public ArrayList<String> numerators;
+	private String denominator;
 	public MarketCalculator
-	(ArrayList<Market> markets, ArrayList<String> numerators) throws InterruptedException {
-        downloadCoins(markets, numerators);
+	(ArrayList<Market> markets, String denominator) throws InterruptedException {
+		numerators = downloadCoins(markets);
+		this.denominator = denominator;
+		
 	}
-	private void downloadCoins(ArrayList<Market> markets, ArrayList<String> numerators) {
+	public ArrayList<String> downloadCoins(ArrayList<Market> markets){
+		ArrayList<String> numerators = new ArrayList<>();
 		for(Market market : markets) {
 			Enumeration<String> keys1 = market.currenciesInfo.keys();
 			while(keys1.hasMoreElements()) {
@@ -37,11 +42,12 @@ public class MarketCalculator {
 				}
 			}
 		}
+		return numerators;
 	}
 	public void mainLoop
-	(ArrayList<Market> markets, String denominator, ArrayList<String> numerators,
+	(ArrayList<Market> markets,
 			Logger logger) throws InterruptedException {
-		downloadOrders(markets, denominator, numerators);
+		downloadOrders(markets, denominator);
 		for(Market market : markets) {
 			market.sortOrders("BTC");
 		}
@@ -87,13 +93,13 @@ public class MarketCalculator {
 						catch(NullPointerException ex) {}
 						//out.println("Z: " + marketAsk.name + " Na: " + marketBid.name);
 						//if(!totalROI.equals(0.0))
-						//	logger.info("Coin: " + coin + " Z: " + marketAsk.name + " Na: " + marketBid.name + "\n" + "Zysk: "  + totalROI);
+							logger.info("Coin: " + coin + " Z: " + marketAsk.name + " Na: " + marketBid.name + "\n" + "Zysk: "  + totalROI);
 		 				boolean displayed = displayTimes(
 		 						new ArbiLine(
 		 								System.currentTimeMillis(), coin, marketAsk.name, marketBid.name),
 		 						totalROI, logger);
 						if(totalROI > 0.01 && !displayed) {
-		 					//logger.info("-------!\n");
+		 					logger.info("-------!\n");
 							ArbiLine current = new ArbiLine(System.currentTimeMillis(), coin, marketAsk.name, marketBid.name);
 		 					current.rois.add(totalROI);
 							if(!containsArbiLine(current, totalROI)) {
@@ -161,8 +167,8 @@ public class MarketCalculator {
 		return false;
 		
 	}
-	private void downloadOrders
-	(ArrayList<Market> markets, String denominator, ArrayList<String> numerators) throws InterruptedException {
+	public void downloadOrders
+	(ArrayList<Market> markets, String denominator) throws InterruptedException {
 		Long start = System.nanoTime();
 		int i = 0;
 		ExecutorService es = Executors.newCachedThreadPool();
@@ -170,7 +176,7 @@ public class MarketCalculator {
 			es.execute(new Runnable() {
 				@Override
 				public void run() {
-					downloadMarket(denominator, numerators, market);
+					downloadMarket(denominator, market);
 				}
 			});
 		}
@@ -179,7 +185,7 @@ public class MarketCalculator {
 		Long end = (long) ((System.nanoTime() - start)/ 1000000.0);
 		System.out.println(i + "\nend: " + end);
 	}
-	private void downloadMarket(String denominator, ArrayList<String> numerators, Market market) {
+	private void downloadMarket(String denominator, Market market) {
 		int numCount = 0;
 		for(String numerator : numerators) {
 				try {
@@ -191,6 +197,7 @@ public class MarketCalculator {
 				System.out.println(market.name + "-> " + numerator + "  " + numCount + "/" + numerators.size());
 		}
 	}
+	
 	private boolean isCoinEnabled(String coin, Market marketAsk, Market marketBid) {
 		try {
 		return marketAsk.currenciesInfo.get(coin).payoutState.equals(WithdrawsState.Enabled) &&

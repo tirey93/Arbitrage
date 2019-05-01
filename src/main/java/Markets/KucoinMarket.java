@@ -1,20 +1,35 @@
 package Markets;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.dto.meta.CurrencyMetaData;
+import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.kucoin.KucoinExchange;
+import org.knowm.xchange.service.marketdata.MarketDataService;
 
 public class KucoinMarket extends Market{
+	private Exchange exchange;
+	private MarketDataService marketDataService;
 	public KucoinMarket() throws Exception {
 		this.name = "Kucoin";
 		commision = 0.001;
 		url = new URL("https://www.kucoin.com/");
+		exchange = ExchangeFactory.INSTANCE.createExchange(KucoinExchange.class.getName());
+		marketDataService = exchange.getMarketDataService();
+		downloadCurrenciesInfo();
 	}
-	@Override
-	public void downloadOrderBook(String numerator, String denominator) throws Exception {
+	
+	public void downloadOrderBook2(String numerator, String denominator) throws Exception {
 		String content = getText("https://api.kucoin.com/v1/open/orders?limit=30&symbol="
 				+ numerator.toUpperCase() + "-" + denominator.toUpperCase());
 		//String content = getText("https://bittrex.com/api/v1.1/public/getmarketsummaries");
@@ -47,6 +62,26 @@ public class KucoinMarket extends Market{
         }
         prices.put(numerator + "-" + denominator, new Prices(sellOrders, buyOrders));
 	}
+	@Override
+	public void downloadOrderBook(String numerator, String denominator) throws Exception {
+		ArrayList<Order> buyOrders = new ArrayList<>();
+        ArrayList<Order> sellOrders = new ArrayList<>();
+		String[] args = new String[1];
+		CurrencyPair pair = new CurrencyPair(numerator, denominator);
+		OrderBook ob = marketDataService.getOrderBook(pair, args);
+		for(LimitOrder lo : ob.getAsks()) {
+			sellOrders.add(
+					new Order(
+					lo.getOriginalAmount().doubleValue(), 
+					lo.getLimitPrice().doubleValue()));
+		}
+		for(LimitOrder lo : ob.getBids()) {
+			buyOrders.add(
+					new Order(
+					lo.getOriginalAmount().doubleValue(), 
+					lo.getLimitPrice().doubleValue()));
+		}
+	}
 
 	private Double parsePrice(Object genre) {
 		Double price = 0.0;
@@ -66,8 +101,8 @@ public class KucoinMarket extends Market{
 		catch(NullPointerException nlEx) {}
 		return price;
 	}
-	@Override
-	public void downloadCurrenciesInfo() throws Exception {
+	
+	public void downloadCurrenciesInfo2() throws Exception {
 		String content = getText("https://api.kucoin.com/v1/market/open/coins");
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(content);
@@ -90,6 +125,23 @@ public class KucoinMarket extends Market{
         	currenciesInfo.put(name, info);
         }
 		
+	}
+	@Override
+	public void downloadCurrenciesInfo() throws Exception {
+		Exchange exchange = ExchangeFactory.INSTANCE.createExchange(KucoinExchange.class.getName());
+		Map<Currency, CurrencyMetaData> pairsMap =
+				exchange.getExchangeMetaData().getCurrencies();
+		for(Map.Entry<Currency, CurrencyMetaData> pair : pairsMap.entrySet()) {
+			if(pair != null) {
+				if(pair.getKey() != null) {
+					CurrencyInfo currency = new CurrencyInfo(pair.getKey().toString());
+					if (pair.getValue() != null){
+						//todo
+					}
+					currenciesInfo.put(pair.getKey().toString().toLowerCase(), currency);
+				}
+			}
+		}
 	}
 
 }

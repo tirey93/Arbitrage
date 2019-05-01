@@ -12,6 +12,7 @@ public class BinanceMarket extends Market {
 		this.name = "Binance";
 		commision = 0.001;
 		url = new URL("https://www.binance.com/");
+		downloadCurrenciesInfo();
 		//https://api.binance.com//api/v1/depth?symbol=LTCBTC
 	}
 	/*@Override

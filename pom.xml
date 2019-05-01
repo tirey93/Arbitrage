@@ -17,7 +17,7 @@
 	  <dependency>
 	  <groupId>org.knowm.xchange</groupId>
 	  <artifactId>xchange-core</artifactId>
-	  <version>4.3.8</version>
+	  <version>LATEST</version>
 	</dependency>
 	<dependency>
   <groupId>org.knowm.xchange</groupId>
@@ -32,12 +32,17 @@
 	<dependency>
   <groupId>org.knowm.xchange</groupId>
   <artifactId>xchange-kucoin</artifactId>
-  <version>4.3.8</version>
+  <version>LATEST</version>
 </dependency>
 <dependency>
   <groupId>org.knowm.xchange</groupId>
   <artifactId>xchange-binance</artifactId>
-  <version>4.3.8</version>
+  <version>LATEST</version>
+</dependency>
+<dependency>
+  <groupId>org.knowm.xchange</groupId>
+  <artifactId>xchange-kraken</artifactId>
+  <version>LATEST</version>
 </dependency>
    <dependency>
     <groupId>com.googlecode.json-simple</groupId>

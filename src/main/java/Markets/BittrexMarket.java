@@ -13,6 +13,7 @@ public class BittrexMarket extends Market{
 		this.name = "Bittrex";
 		commision = 0.0025;
 		url = new URL("https://bittrex.com/");
+		downloadCurrenciesInfo();
 	}
 	/*@Override
 	public void downloadPrices() throws Exception {

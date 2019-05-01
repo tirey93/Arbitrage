@@ -10,12 +10,12 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public abstract class Market {
-	String name;
+	public String name;
 	Double commision;
 	URL url;
 	Map<String, Prices> prices = new HashMap<>();
 	//Map<String, Price> prices = new HashMap<>();
-	Dictionary<String, CurrencyInfo> currenciesInfo = new Hashtable<>();
+	public Dictionary<String, CurrencyInfo> currenciesInfo = new Hashtable<>();
 	
 	public String getText(String url) throws Exception {
         URL website = new URL(url);
