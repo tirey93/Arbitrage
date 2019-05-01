@@ -13,14 +13,6 @@
 	<name>dateUtils</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.compiler.testSource>1.8</maven.compiler.testSource>
-    <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
-    <mainClass>com.Main</mainClass>
-  </properties>
-
 <dependencies>
 
 	  <dependency>
@@ -60,5 +52,23 @@
     <version>1.1</version>
 </dependency>
   </dependencies>
+  
+  <build>
+  <plugins>
+    <plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+      <configuration>
+        <archive>
+          <manifest>
+            <mainClass>com.Main</mainClass>
+          </manifest>
+        </archive>
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
 
 </project>
