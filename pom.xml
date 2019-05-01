@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
 	http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.mkyong.core.utils</groupId>
-	<artifactId>dateUtils</artifactId>
+	<groupId>inarious-team</groupId>
+	<artifactId>arbitrage</artifactId>
 	
 	<!-- Output to jar format -->
 	<packaging>jar</packaging>
 	
 	<version>1.0-SNAPSHOT</version>
-	<name>dateUtils</name>
+	<name>arbitrage</name>
 	<url>http://maven.apache.org</url>
 
 <dependencies>
