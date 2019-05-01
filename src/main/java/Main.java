@@ -95,7 +95,7 @@ public class Main {
 	private static void prepareLogger(Logger logger) throws IOException, Exception {
 		FileHandler fh;
 		// This block configure the logger with handler and formatter
-		fh = new FileHandler("C:\\Users\\Damian Pytkowski\\eclipse-workspace-oxygen\\Arbitrage\\MyLogFile.log");
+		fh = new FileHandler("MyLogFile.log");
 		logger.addHandler(fh);
 		SimpleFormatter formatter = new SimpleFormatter();
 		fh.setFormatter(formatter);
