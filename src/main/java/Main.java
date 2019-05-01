@@ -15,6 +15,8 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.binance.BinanceExchange;
+import org.knowm.xchange.bitfinex.v2.Bitfinex;
+import org.knowm.xchange.bitfinex.v2.BitfinexExchange;
 import org.knowm.xchange.bittrex.BittrexExchange;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
@@ -33,6 +35,7 @@ import org.knowm.xchange.service.trade.params.WithdrawFundsParams;
 import org.python.util.PythonInterpreter;
 
 import Markets.BinanceMarket;
+import Markets.BitfinexMarket;
 import Markets.BittrexMarket;
 import Markets.KucoinMarket;
 import Markets.Market;
@@ -44,12 +47,16 @@ public class Main {
 	public static ArrayList<String> numerators = new ArrayList<String>();
 
 	public static void main(String[] args) throws Exception {
-		//Exchange bitstamp = ExchangeFactory.INSTANCE.createExchange(KucoinExchange.class.getName());
-		
+		runLoop();
+
+	}
+	
+	private static void runLoop() throws Exception{
 		ArrayList<Market> markets = new ArrayList<>();
 		markets.add(new KucoinMarket());
 		markets.add(new BinanceMarket());
 		markets.add(new BittrexMarket());
+		markets.add(new BitfinexMarket());
 		
 		MarketCalculator mc = new MarketCalculator(markets, "BTC");
 		Logger logger = Logger.getLogger(Main.class.getName()); 
@@ -60,9 +67,7 @@ public class Main {
 		while(true) {
 			mc.mainLoop(markets, logger);
 		}
-		
 	}
-
 	private static Exchange prepareExchange(String name) {
 		Exchange exchange = null;
 		ExchangeSpecification exSpec = null;

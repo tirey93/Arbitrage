@@ -128,7 +128,6 @@ public class KucoinMarket extends Market{
 	}
 	@Override
 	public void downloadCurrenciesInfo() throws Exception {
-		Exchange exchange = ExchangeFactory.INSTANCE.createExchange(KucoinExchange.class.getName());
 		Map<Currency, CurrencyMetaData> pairsMap =
 				exchange.getExchangeMetaData().getCurrencies();
 		for(Map.Entry<Currency, CurrencyMetaData> pair : pairsMap.entrySet()) {
@@ -136,7 +135,7 @@ public class KucoinMarket extends Market{
 				if(pair.getKey() != null) {
 					CurrencyInfo currency = new CurrencyInfo(pair.getKey().toString());
 					if (pair.getValue() != null){
-						//todo
+						currency.txFee = pair.getValue().getWithdrawalFee().doubleValue();
 					}
 					currenciesInfo.put(pair.getKey().toString().toLowerCase(), currency);
 				}
