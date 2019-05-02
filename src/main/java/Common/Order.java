@@ -1,4 +1,4 @@
-package Markets;
+package Common;
 public class Order {
 	public Double quantity;
 	public Double rate;

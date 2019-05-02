@@ -1,4 +1,4 @@
-package com;
+package app;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
@@ -11,12 +11,12 @@ import org.knowm.xchange.binance.BinanceExchange;
 import org.knowm.xchange.bittrex.BittrexExchange;
 import org.knowm.xchange.kucoin.KucoinExchange;
 
+import Common.MarketCalculator;
 import Markets.BinanceMarket;
 import Markets.BitfinexMarket;
 import Markets.BittrexMarket;
 import Markets.KucoinMarket;
 import Markets.Market;
-import Markets.MarketCalculator;
 
 public class Main {
 

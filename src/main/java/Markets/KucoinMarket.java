@@ -17,6 +17,11 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.kucoin.KucoinExchange;
 import org.knowm.xchange.service.marketdata.MarketDataService;
 
+import Common.CurrencyInfo;
+import Common.Order;
+import Common.Prices;
+import Common.WithdrawsState;
+
 public class KucoinMarket extends Market{
 	private Exchange exchange;
 	private MarketDataService marketDataService;

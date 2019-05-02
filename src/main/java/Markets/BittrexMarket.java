@@ -7,6 +7,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import Common.CurrencyInfo;
+import Common.Order;
+import Common.Prices;
+import Common.WithdrawsState;
+
 public class BittrexMarket extends Market{
 
 	public BittrexMarket() throws Exception {

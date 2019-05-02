@@ -9,11 +9,14 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import Common.CurrencyInfo;
+import Common.Prices;
+
 public abstract class Market {
 	public String name;
-	Double commision;
+	public Double commision;
 	URL url;
-	Map<String, Prices> prices = new HashMap<>();
+	public Map<String, Prices> prices = new HashMap<>();
 	//Map<String, Price> prices = new HashMap<>();
 	public Dictionary<String, CurrencyInfo> currenciesInfo = new Hashtable<>();
 	

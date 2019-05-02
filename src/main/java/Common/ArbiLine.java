@@ -1,4 +1,4 @@
-package Markets;
+package Common;
 import java.util.ArrayList;
 
 public class ArbiLine {
