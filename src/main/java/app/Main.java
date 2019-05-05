@@ -17,8 +17,11 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import Common.ArbiLine;
 import Common.ArbiLine2;
+import Common.JsonClass;
 import Common.MarketCalculator;
+import Common.Transaction;
 import Markets.BinanceMarket;
 import Markets.BitfinexMarket;
 import Markets.BittrexMarket;
@@ -31,29 +34,8 @@ public class Main {
 	public static ArrayList<String> numerators = new ArrayList<String>();
 
 	public static void main(String[] args) throws Exception {
-		//runLoop();
-		TestJson testJson = new TestJson();
-		testJson.setIntVar(5);
-		testJson.setStringVar("test1");
-		ArrayList<TestJson> al = new ArrayList<>();
-		al.add(new TestJson(10, "nest1"));
-		al.add(new TestJson(20, "nest2"));
-		//testJson.setListVar(al);
-		Complex c1 = new Complex(2.0, 3.0, "first");
-		Complex c2 = new Complex(2.5, 4.0, "second");
-		Map<Complex, TestJson> mapa = new HashMap<Complex, TestJson>();
-		mapa.put(c1, new TestJson(10, "nest1"));
-		mapa.put(c2, new TestJson(20, "nest2"));
-		
-		testJson.setMapa(mapa);
-		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
-		//System.out.println(gson.toJson(testJson));
-		
-		//TestJson testJsonOut = gson.fromJson(gson.toJson(testJson), TestJson.class);
-		
-		/*for (Map.Entry<Complex, TestJson> entry : mapa.entrySet()) {
-			
-		}*/
+		runLoop();
+	
 
 	}
 	
@@ -106,6 +88,26 @@ public class Main {
 		SimpleFormatter formatter = new SimpleFormatter();
 		fh.setFormatter(formatter);
 	}
+	/*json.addArbiLine(new ArbiLine("BTC", "ETH", "Kucoin", "Bittrex"));
+	json.getArbiLines().get(new ArbiLine
+			("BTC", "ETH", "Binance", "Bittrex").hashCode()).
+			addTransaction(new Transaction(0.1, 21.0, 1.15));
+	json.getArbiLines().get(new ArbiLine
+			("BTC", "ETH", "Binance", "Bittrex").hashCode()).
+			addTransaction(new Transaction(0.2, 20.0, 1.15));*/
+	/*System.out.println(gson.toJson(json));
+	JsonClass testJsonOut = gson.fromJson(gson.toJson(json), JsonClass.class);
+	if(testJsonOut != null) {
+		System.out.println(testJsonOut.getArbiLines().size());
+		
+	}*/
+	//System.out.println(gson.toJson(testJson));
+	
+	//TestJson testJsonOut = gson.fromJson(gson.toJson(testJson), TestJson.class);
+	
+	/*for (Map.Entry<Complex, TestJson> entry : mapa.entrySet()) {
+		
+	}*/
 	/*
 	 * Properties props = new Properties(); props.put("python.home","C:\\Python37");
 	 * props.put("python.console.encoding", "UTF-8"); // Used to prevent: console:

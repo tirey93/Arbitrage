@@ -1,4 +1,8 @@
 package Common;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +14,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import com.google.gson.stream.JsonReader;
 
 import Markets.Market;
 
@@ -51,10 +60,10 @@ public class MarketCalculator {
 			Logger logger) throws InterruptedException {
 		downloadOrders(markets, denominator);
 		for(Market market : markets) {
-			market.sortOrders("BTC");
+			market.sortOrders(denominator);
 		}
 
-		
+		JsonClass json = downloadJson("MyLogFile.json");
 		
 		//PrintWriter out = new PrintWriter("filename.txt");
   
@@ -63,30 +72,69 @@ public class MarketCalculator {
 			for(Market marketBid : markets) {
 				for(Market marketAsk : markets) { 
 					if(!marketAsk.name.equals(marketBid.name) && isCoinEnabled(coin, marketAsk, marketBid)) {
-						Double totalROI = calcProfitNet(coin, marketBid, marketAsk);
+						Double[] result = calcProfitNet(coin, marketBid, marketAsk);
+						Double totalROI = result[0];
+						Double sumToBuy = result[1];
+						Double sumToSell = result[2];
 						//out.println("Z: " + marketAsk.name + " Na: " + marketBid.name);
 						//if(!totalROI.equals(0.0))
-						logger.info("Coin: " + coin + " Z: " + marketAsk.name + " Na: " + marketBid.name + "\n" + "Zysk: "  + totalROI);
-		 				boolean displayed = displayTimes(
-		 						new ArbiLine2(
-		 								System.currentTimeMillis(), coin, marketAsk.name, marketBid.name),
-		 						totalROI, logger);
-						if(totalROI > 0.01 && !displayed) {
-		 					displayPositiveProfit(logger, coin, marketBid, marketAsk, totalROI);
-		 				}
+						
+						ArbiLine line = new ArbiLine(coin, denominator, marketAsk.name, marketBid.name);
+						
+						if(json.hasArbiLine(line)) {
+							Transaction transaction = new Transaction(totalROI, sumToSell, sumToBuy);
+							json.getArbiLines().get(line.hashCode()).addTransaction(transaction);
+						}
+						else {
+							if(totalROI > 0.01) {
+								Transaction transaction = new Transaction(totalROI, sumToSell, sumToBuy);
+								json.addArbiLine(line, transaction);
+			 				}
+						}
 					}
 				}
 			}
 			
 		}
-		SimpleDateFormat format = new SimpleDateFormat("mm:ss.SSS"); 
-		String builder = "";
-		for(ArbiLine2 a : arbiLines) {
-			Long end = System.currentTimeMillis() - a.startTime;
-			builder += a.asset + " " + format.format(end) + "\n";
-		}
-		logger.info("Kolejka:\n" + builder);
 		
+		uploadJson(json, "MyLogFile.json");
+		
+	}
+	private void uploadJson(JsonClass json, String path) {
+		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+		createJson(path, gson, json);
+	}
+	private JsonClass downloadJson(String path) {
+		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+		try {
+			return getJson(gson, path);
+		} catch (FileNotFoundException e) {
+			JsonClass json = new JsonClass();
+			createJson(path, gson, json);
+			try {
+				return getJson(gson, path);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return null;
+	}
+	private JsonClass getJson(Gson gson, String path) throws FileNotFoundException {
+		JsonReader reader = new JsonReader(new FileReader(path));
+		return gson.fromJson(reader, JsonClass.class);
+	}
+	private void createJson(String path, Gson gson, JsonClass json) {
+		
+		try {
+			//System.out.println(gson.toJson(json));
+			try (FileWriter writer = new FileWriter(path)) {
+			    gson.toJson(json, writer);
+			}
+		} catch (JsonIOException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	private void displayPositiveProfit(Logger logger, String coin, Market marketBid, Market marketAsk,
 			Double totalROI) {
@@ -100,8 +148,10 @@ public class MarketCalculator {
 			System.out.println(coin + " " + totalROI);
 		}
 	}
-	private Double calcProfitNet(String coin, Market marketBid, Market marketAsk) {
+	private Double[] calcProfitNet(String coin, Market marketBid, Market marketAsk) {
 		Double totalROI = 0.0;
+		Double sumToSell = 0.0;
+		Double sumToBuy = 0.0;
 		try {
 			ArrayList<Order> asks = marketAsk.prices.get(coin + "-" + denominator).asks;
 			ArrayList<Order> bids = marketBid.prices.get(coin + "-" + denominator).bids;
@@ -111,8 +161,8 @@ public class MarketCalculator {
 			int pivotBid = result[1];
 			if(pivotAsk + pivotBid > 0) {
 					Double[] result2 = computeMarketValues(coin, asks, bids, pivotAsk, pivotBid);
-					Double sumToSell = result2[0];
-					Double sumToBuy = result2[1];
+					sumToSell = result2[0];
+					sumToBuy = result2[1];
 					Double profitGross = sumToBuy - sumToSell;
 					Double transactionCharge = 
 							marketAsk.currenciesInfo.get(coin).txFee *
@@ -131,7 +181,8 @@ public class MarketCalculator {
 			}
 		}
 		catch(NullPointerException ex) {}
-		return totalROI;
+		Double[] result = {totalROI, sumToBuy, sumToSell};
+		return result;
 	}
 	private boolean containsArbiLine(ArbiLine2 current, Double totalROI) {
 		for(ArbiLine2 aLi : arbiLines) {
