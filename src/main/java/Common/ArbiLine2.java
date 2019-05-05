@@ -1,7 +1,7 @@
 package Common;
 import java.util.ArrayList;
 
-public class ArbiLine {
+public class ArbiLine2 {
 	public Long startTime;
 	public Long endTime = Long.parseLong("0");
 	public String asset;
@@ -9,7 +9,7 @@ public class ArbiLine {
 	public String marketBid;
 	public int nShowNegative;
 	public ArrayList<Double> rois = new ArrayList<>();
-	public ArbiLine(Long startTime, String asset, String marketAsk, String marketBid) {
+	public ArbiLine2(Long startTime, String asset, String marketAsk, String marketBid) {
 		super();
 		this.startTime = startTime;
 		this.asset = asset;

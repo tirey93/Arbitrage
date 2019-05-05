@@ -15,7 +15,7 @@ import Markets.Market;
 
 public class MarketCalculator {
 	private Double toSpend = 0.02;
-	public ArrayList<ArbiLine> arbiLines = new ArrayList<>();
+	public ArrayList<ArbiLine2> arbiLines = new ArrayList<>();
 	public ArrayList<String> numerators;
 	private String denominator;
 	public MarketCalculator
@@ -63,53 +63,16 @@ public class MarketCalculator {
 			for(Market marketBid : markets) {
 				for(Market marketAsk : markets) { 
 					if(!marketAsk.name.equals(marketBid.name) && isCoinEnabled(coin, marketAsk, marketBid)) {
-						Double totalROI = 0.0;
-						try {
-							ArrayList<Order> asks = marketAsk.prices.get(coin + "-" + denominator).asks;
-							ArrayList<Order> bids = marketBid.prices.get(coin + "-" + denominator).bids;
-		
-							int[] result = findLowestPositions(asks, bids);
-							int pivotAsk = result[0];
-							int pivotBid = result[1];
-					 		if(pivotAsk + pivotBid > 0) {
-					 				Double[] result2 = computeMarketValues(coin, asks, bids, pivotAsk, pivotBid);
-					 				Double sumToSell = result2[0];
-					 				Double sumToBuy = result2[1];
-					 				Double profitGross = sumToBuy - sumToSell;
-					 				Double transactionCharge = 
-					 						marketAsk.currenciesInfo.get(coin).txFee *
-					 						marketBid.prices.get(coin + "-" + denominator).bids.get(0).rate;
-					 				Double commissionCharge = 
-					 						sumToSell * marketAsk.commision + 
-					 						(sumToBuy - transactionCharge) * marketBid.commision;
-					 				Double profitNet = profitGross - commissionCharge - transactionCharge;
-					 				totalROI = profitNet / sumToSell * 100.0;
-					 				/*logger.info(String.format("\nSTS: %.8f", sumToSell) +
-					 						String.format("\nSTB: %.8f", sumToBuy) +
-					 						String.format("\nPG: %.8f", profitGross) +
-					 						String.format("\nTC: %.8f", transactionCharge) +
-					 						String.format("\nCC: %.8f", commissionCharge) +
-					 						String.format("\nPN: %.8f", profitNet));*/
-					 		}
-						}
-						catch(NullPointerException ex) {}
+						Double totalROI = calcProfitNet(coin, marketBid, marketAsk);
 						//out.println("Z: " + marketAsk.name + " Na: " + marketBid.name);
 						//if(!totalROI.equals(0.0))
-							logger.info("Coin: " + coin + " Z: " + marketAsk.name + " Na: " + marketBid.name + "\n" + "Zysk: "  + totalROI);
+						logger.info("Coin: " + coin + " Z: " + marketAsk.name + " Na: " + marketBid.name + "\n" + "Zysk: "  + totalROI);
 		 				boolean displayed = displayTimes(
-		 						new ArbiLine(
+		 						new ArbiLine2(
 		 								System.currentTimeMillis(), coin, marketAsk.name, marketBid.name),
 		 						totalROI, logger);
 						if(totalROI > 0.01 && !displayed) {
-		 					logger.info("-------!\n");
-							ArbiLine current = new ArbiLine(System.currentTimeMillis(), coin, marketAsk.name, marketBid.name);
-		 					current.rois.add(totalROI);
-							if(!containsArbiLine(current, totalROI)) {
-		 						arbiLines.add(current);
-		 					}
-		 					else {
-		 						System.out.println(coin + " " + totalROI);
-		 					}
+		 					displayPositiveProfit(logger, coin, marketBid, marketAsk, totalROI);
 		 				}
 					}
 				}
@@ -118,15 +81,60 @@ public class MarketCalculator {
 		}
 		SimpleDateFormat format = new SimpleDateFormat("mm:ss.SSS"); 
 		String builder = "";
-		for(ArbiLine a : arbiLines) {
+		for(ArbiLine2 a : arbiLines) {
 			Long end = System.currentTimeMillis() - a.startTime;
 			builder += a.asset + " " + format.format(end) + "\n";
 		}
 		logger.info("Kolejka:\n" + builder);
 		
 	}
-	private boolean containsArbiLine(ArbiLine current, Double totalROI) {
-		for(ArbiLine aLi : arbiLines) {
+	private void displayPositiveProfit(Logger logger, String coin, Market marketBid, Market marketAsk,
+			Double totalROI) {
+		logger.info("-------!\n");
+		ArbiLine2 current = new ArbiLine2(System.currentTimeMillis(), coin, marketAsk.name, marketBid.name);
+		current.rois.add(totalROI);
+		if(!containsArbiLine(current, totalROI)) {
+			arbiLines.add(current);
+		}
+		else {
+			System.out.println(coin + " " + totalROI);
+		}
+	}
+	private Double calcProfitNet(String coin, Market marketBid, Market marketAsk) {
+		Double totalROI = 0.0;
+		try {
+			ArrayList<Order> asks = marketAsk.prices.get(coin + "-" + denominator).asks;
+			ArrayList<Order> bids = marketBid.prices.get(coin + "-" + denominator).bids;
+
+			int[] result = findLowestPositions(asks, bids);
+			int pivotAsk = result[0];
+			int pivotBid = result[1];
+			if(pivotAsk + pivotBid > 0) {
+					Double[] result2 = computeMarketValues(coin, asks, bids, pivotAsk, pivotBid);
+					Double sumToSell = result2[0];
+					Double sumToBuy = result2[1];
+					Double profitGross = sumToBuy - sumToSell;
+					Double transactionCharge = 
+							marketAsk.currenciesInfo.get(coin).txFee *
+							marketBid.prices.get(coin + "-" + denominator).bids.get(0).rate;
+					Double commissionCharge = 
+							sumToSell * marketAsk.commision + 
+							(sumToBuy - transactionCharge) * marketBid.commision;
+					Double profitNet = profitGross - commissionCharge - transactionCharge;
+					totalROI = profitNet / sumToSell * 100.0;
+					/*logger.info(String.format("\nSTS: %.8f", sumToSell) +
+							String.format("\nSTB: %.8f", sumToBuy) +
+							String.format("\nPG: %.8f", profitGross) +
+							String.format("\nTC: %.8f", transactionCharge) +
+							String.format("\nCC: %.8f", commissionCharge) +
+							String.format("\nPN: %.8f", profitNet));*/
+			}
+		}
+		catch(NullPointerException ex) {}
+		return totalROI;
+	}
+	private boolean containsArbiLine(ArbiLine2 current, Double totalROI) {
+		for(ArbiLine2 aLi : arbiLines) {
 			if(aLi.marketAsk.equals(current.marketAsk) && aLi.marketBid.equals(current.marketBid)
 					&& aLi.asset.equals(current.asset)){
 				aLi.rois.add(totalROI);
@@ -135,17 +143,17 @@ public class MarketCalculator {
 		}
 		return false;
 	}
-	private String concatenateRois(ArbiLine current) {
+	private String concatenateRois(ArbiLine2 current) {
 		String result = "";
 		for(Double roi : current.rois) {
 			result += String.format("%.2f%%", roi) + " ";
 		}
 		return result;
 	}
-	private boolean displayTimes(ArbiLine current, Double roi, Logger logger) {
-		Iterator<ArbiLine> i = arbiLines.iterator();
+	private boolean displayTimes(ArbiLine2 current, Double roi, Logger logger) {
+		Iterator<ArbiLine2> i = arbiLines.iterator();
 		while(i.hasNext()) {
-			ArbiLine aLi = i.next();
+			ArbiLine2 aLi = i.next();
 			if(aLi.marketAsk.equals(current.marketAsk) && aLi.marketBid.equals(current.marketBid)
 					&& aLi.asset.equals(current.asset)) {
 				if(roi <= 0 && aLi.nShowNegative > 0) {

@@ -1,6 +1,8 @@
 package app;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -11,6 +13,11 @@ import org.knowm.xchange.binance.BinanceExchange;
 import org.knowm.xchange.bittrex.BittrexExchange;
 import org.knowm.xchange.kucoin.KucoinExchange;
 
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import Common.ArbiLine2;
 import Common.MarketCalculator;
 import Markets.BinanceMarket;
 import Markets.BitfinexMarket;
@@ -24,7 +31,29 @@ public class Main {
 	public static ArrayList<String> numerators = new ArrayList<String>();
 
 	public static void main(String[] args) throws Exception {
-		runLoop();
+		//runLoop();
+		TestJson testJson = new TestJson();
+		testJson.setIntVar(5);
+		testJson.setStringVar("test1");
+		ArrayList<TestJson> al = new ArrayList<>();
+		al.add(new TestJson(10, "nest1"));
+		al.add(new TestJson(20, "nest2"));
+		//testJson.setListVar(al);
+		Complex c1 = new Complex(2.0, 3.0, "first");
+		Complex c2 = new Complex(2.5, 4.0, "second");
+		Map<Complex, TestJson> mapa = new HashMap<Complex, TestJson>();
+		mapa.put(c1, new TestJson(10, "nest1"));
+		mapa.put(c2, new TestJson(20, "nest2"));
+		
+		testJson.setMapa(mapa);
+		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+		//System.out.println(gson.toJson(testJson));
+		
+		//TestJson testJsonOut = gson.fromJson(gson.toJson(testJson), TestJson.class);
+		
+		/*for (Map.Entry<Complex, TestJson> entry : mapa.entrySet()) {
+			
+		}*/
 
 	}
 	
