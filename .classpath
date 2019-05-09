@@ -22,6 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/jython2.7.0/jython.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

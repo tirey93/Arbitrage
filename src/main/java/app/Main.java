@@ -44,7 +44,7 @@ public class Main {
 		markets.add(new KucoinMarket());
 		markets.add(new BinanceMarket());
 		markets.add(new BittrexMarket());
-		markets.add(new BitfinexMarket());
+		//markets.add(new BitfinexMarket());
 		
 		MarketCalculator mc = new MarketCalculator(markets, "BTC");
 		Logger logger = Logger.getLogger(Main.class.getName()); 
