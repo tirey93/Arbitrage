@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             articles.add(new Article());
 
         // tworzymy adapter oraz łączymy go z RecyclerView
-        MyAdapter myAdapter = new MyAdapter(articles, recyclerView);
+        MyAdapter myAdapter = new MyAdapter(articles, recyclerView, getApplicationContext());
         recyclerView.setAdapter(myAdapter);
 
         SwipeController swipeController = new SwipeController(myAdapter);
