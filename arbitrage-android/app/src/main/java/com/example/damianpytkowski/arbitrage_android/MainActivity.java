@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
             articles.add(new Article());
 
         // tworzymy adapter oraz łączymy go z RecyclerView
-        recyclerView.setAdapter(new MyAdapter(articles, recyclerView));
+        MyAdapter myAdapter = new MyAdapter(articles, recyclerView);
+        recyclerView.setAdapter(myAdapter);
+
+        SwipeController swipeController = new SwipeController(myAdapter);
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 }

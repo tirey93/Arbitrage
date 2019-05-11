@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import android.support.v7.widget.helper.ItemTouchHelper.Callback;
+import static android.support.v7.widget.helper.ItemTouchHelper.*;
 
 class MyAdapter extends RecyclerView.Adapter {
     // źródło danych
@@ -42,22 +44,18 @@ class MyAdapter extends RecyclerView.Adapter {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.article_layout, viewGroup, false);
 
-        // dla elementu listy ustawiamy obiekt OnClickListener,
-        // który usunie element z listy po kliknięciu na niego
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // odnajdujemy indeks klikniętego elementu
-                int positionToDelete = mRecyclerView.getChildAdapterPosition(v);
-                // usuwamy element ze źródła danych
-                mArticles.remove(positionToDelete);
-                // poniższa metoda w animowany sposób usunie element z listy
-                notifyItemRemoved(positionToDelete);
-            }
-        });
 
         // tworzymy i zwracamy obiekt ViewHolder
         return new MyViewHolder(view);
+    }
+
+    public void remove(View v) {
+        int positionToDelete = mRecyclerView.getChildAdapterPosition(v);
+
+        // usuwamy element ze źródła danych
+        mArticles.remove(positionToDelete);
+        // poniższa metoda w animowany sposób usunie element z listy
+        notifyItemRemoved(positionToDelete);
     }
 
     @Override
