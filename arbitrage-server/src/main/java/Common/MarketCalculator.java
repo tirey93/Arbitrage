@@ -159,7 +159,8 @@ public class MarketCalculator {
 			int[] result = findLowestPositions(asks, bids);
 			int pivotAsk = result[0];
 			int pivotBid = result[1];
-			if(pivotAsk + pivotBid > 0) {
+			//if(pivotAsk + pivotBid > 0) 
+			{
 					Double[] result2 = computeMarketValues(coin, asks, bids, pivotAsk, pivotBid);
 					sumToSell = result2[0];
 					sumToBuy = result2[1];

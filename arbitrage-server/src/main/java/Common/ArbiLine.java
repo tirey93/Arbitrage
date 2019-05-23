@@ -7,6 +7,7 @@ public class ArbiLine {
 	private String denominator;
 	private String marketAsk;
 	private String marketBid;
+	private Transaction latest;
 	private ArrayList<Transaction> transactions = new ArrayList<>();
 	
 
@@ -19,6 +20,7 @@ public class ArbiLine {
 	}
 	public void addTransaction(Transaction transaction) {
 		transactions.add(transaction);
+		latest = transaction;
 	}
 	@Override
 	public int hashCode() {
@@ -90,6 +92,12 @@ public class ArbiLine {
 	}
 	public void setTransactions(ArrayList<Transaction> transactions) {
 		this.transactions = transactions;
+	}
+	public Transaction getLatest() {
+		return latest;
+	}
+	public void setLatest(Transaction latest) {
+		this.latest = latest;
 	}
 	
 }
