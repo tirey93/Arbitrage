@@ -17,7 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-public class RetrieveJson extends AsyncTask<String, Void, String> {
+public class RetrieveJson extends AsyncTask<String, Void, Void> {
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private  Context context;
@@ -29,7 +29,7 @@ public class RetrieveJson extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected Void doInBackground(String... strings) {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
         String s = "";
@@ -56,7 +56,7 @@ public class RetrieveJson extends AsyncTask<String, Void, String> {
         SwipeController swipeController = new SwipeController(myAdapter);
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(recyclerView);
-        return s;
+        return null;
     }
     public static String getText(String url) throws Exception {
         URL website = new URL(url);
