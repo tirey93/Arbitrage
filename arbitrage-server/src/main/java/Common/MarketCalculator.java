@@ -73,7 +73,7 @@ public class MarketCalculator {
 				for(Market marketAsk : markets) { 
 					if(!marketAsk.name.equals(marketBid.name) && isCoinEnabled(coin, marketAsk, marketBid)) {
 						Double[] result = calcProfitNet(coin, marketBid, marketAsk);
-						Double totalROI = result[0];
+						Double totalROI = result[0] + 1.0;
 						Double sumToBuy = result[1];
 						Double sumToSell = result[2];
 						//out.println("Z: " + marketAsk.name + " Na: " + marketBid.name);
@@ -101,11 +101,11 @@ public class MarketCalculator {
 		
 	}
 	private void uploadJson(JsonClass json, String path) {
-		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
 		createJson(path, gson, json);
 	}
 	private JsonClass downloadJson(String path) {
-		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
 		try {
 			return getJson(gson, path);
 		} catch (FileNotFoundException e) {
