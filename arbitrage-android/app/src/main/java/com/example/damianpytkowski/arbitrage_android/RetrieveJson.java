@@ -21,6 +21,7 @@ public class RetrieveJson extends AsyncTask<String, Void, Void> {
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private  Context context;
+    private ArrayList<Article> articles;
 
     public RetrieveJson(ProgressBar progressBar, RecyclerView recyclerView, Context applicationContext) {
         this.progressBar = progressBar;
@@ -45,10 +46,17 @@ public class RetrieveJson extends AsyncTask<String, Void, Void> {
         js = gson.fromJson(s, JsonClass.class);
 
 
-        ArrayList<Article> articles = new ArrayList<>();
-        for (int i = 0; i < 20; ++i)
-            articles.add(new Article());
 
+        articles = new ArrayList<>();
+        /*for (int i = 0; i < 20; ++i)
+            articles.add(new Article());
+        */
+
+        
+        return null;
+    }
+    @Override
+    protected void onPostExecute(Void param){
         // tworzymy adapter oraz łączymy go z RecyclerView
         MyAdapter myAdapter = new MyAdapter(articles,recyclerView,context);
         recyclerView.setAdapter(myAdapter);
@@ -56,7 +64,6 @@ public class RetrieveJson extends AsyncTask<String, Void, Void> {
         SwipeController swipeController = new SwipeController(myAdapter);
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(recyclerView);
-        return null;
     }
     public static String getText(String url) throws Exception {
         URL website = new URL(url);
