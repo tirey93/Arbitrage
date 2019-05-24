@@ -7,6 +7,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.example.damianpytkowski.arbitrage_android.Common.ArbiLine;
 import com.example.damianpytkowski.arbitrage_android.Common.JsonClass;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,7 +22,7 @@ public class RetrieveJson extends AsyncTask<String, Void, Void> {
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private  Context context;
-    private ArrayList<Article> articles;
+    private ArrayList<ArbiLine> articles;
 
     public RetrieveJson(ProgressBar progressBar, RecyclerView recyclerView, Context applicationContext) {
         this.progressBar = progressBar;
@@ -52,7 +53,7 @@ public class RetrieveJson extends AsyncTask<String, Void, Void> {
             articles.add(new Article());
         */
 
-        
+        articles.addAll(js.getArbiLines().values());
         return null;
     }
     @Override

@@ -11,11 +11,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import android.support.v7.widget.helper.ItemTouchHelper.Callback;
+
+import com.example.damianpytkowski.arbitrage_android.Common.ArbiLine;
+
 import static android.support.v7.widget.helper.ItemTouchHelper.*;
 
 class MyAdapter extends RecyclerView.Adapter {
     // źródło danych
-    private ArrayList<Article> mArticles = new ArrayList<>();
+    private ArrayList<ArbiLine> mArticles = new ArrayList<>();
 
     // obiekt listy artykułów
     private RecyclerView mRecyclerView;
@@ -35,7 +38,7 @@ class MyAdapter extends RecyclerView.Adapter {
     }
 
     // konstruktor adaptera
-    public MyAdapter(ArrayList<Article> pArticles, RecyclerView pRecyclerView, Context context){
+    public MyAdapter(ArrayList<ArbiLine> pArticles, RecyclerView pRecyclerView, Context context){
         mArticles = pArticles;
         mRecyclerView = pRecyclerView;
         mContext = context;
@@ -71,9 +74,9 @@ class MyAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int i) {
         // uzupełniamy layout artykułu
-        Article article = mArticles.get(i);
-        ((MyViewHolder) viewHolder).mTitle.setText(article.getTitle());
-        ((MyViewHolder) viewHolder).mContent.setText(article.getContent());
+        ArbiLine article = mArticles.get(i);
+        ((MyViewHolder) viewHolder).mTitle.setText(article.getMarketAsk() + " -> " + article.getMarketBid());
+        ((MyViewHolder) viewHolder).mContent.setText(article.getAsset() + " (" + article.getLatest().getRoi().toString() + " )");
     }
 
     @Override
