@@ -28,29 +28,6 @@ public class SwipeController extends Callback{
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        String s = "";
-        try {
-            s = getText("http://www.google.com");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         myAdapter.remove(viewHolder.itemView);
-    }
-    public static String getText(String url) throws Exception {
-        URL website = new URL(url);
-        URLConnection connection = website.openConnection();
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        connection.getInputStream()));
-
-        StringBuilder response = new StringBuilder();
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null)
-            response.append(inputLine);
-
-        in.close();
-
-        return response.toString();
     }
 }

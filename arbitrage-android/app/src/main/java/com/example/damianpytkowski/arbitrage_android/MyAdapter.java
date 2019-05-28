@@ -2,7 +2,6 @@ package com.example.damianpytkowski.arbitrage_android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import android.support.v7.widget.helper.ItemTouchHelper.Callback;
 
 import com.example.damianpytkowski.arbitrage_android.Common.ArbiLine;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.*;
-
 class MyAdapter extends RecyclerView.Adapter {
     // źródło danych
-    private ArrayList<ArbiLine> mArticles = new ArrayList<>();
+    private ArrayList<ArbiLine> mArbiLinesList = new ArrayList<>();
 
     // obiekt listy artykułów
     private RecyclerView mRecyclerView;
@@ -38,10 +34,17 @@ class MyAdapter extends RecyclerView.Adapter {
     }
 
     // konstruktor adaptera
-    public MyAdapter(ArrayList<ArbiLine> pArticles, RecyclerView pRecyclerView, Context context){
-        mArticles = pArticles;
+    public MyAdapter(RecyclerView pRecyclerView, Context context){
         mRecyclerView = pRecyclerView;
         mContext = context;
+    }
+
+    public void setmArbiLinesList(ArrayList<ArbiLine> mArbiLinesList) {
+        this.mArbiLinesList = mArbiLinesList;
+    }
+
+    public ArrayList<ArbiLine> getmArbiLinesList() {
+        return mArbiLinesList;
     }
 
     @Override
@@ -66,7 +69,7 @@ class MyAdapter extends RecyclerView.Adapter {
         int positionToDelete = mRecyclerView.getChildAdapterPosition(v);
 
         // usuwamy element ze źródła danych
-        mArticles.remove(positionToDelete);
+        mArbiLinesList.remove(positionToDelete);
         // poniższa metoda w animowany sposób usunie element z listy
         notifyItemRemoved(positionToDelete);
     }
@@ -74,13 +77,13 @@ class MyAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int i) {
         // uzupełniamy layout artykułu
-        ArbiLine article = mArticles.get(i);
-        ((MyViewHolder) viewHolder).mTitle.setText(article.getMarketAsk() + " -> " + article.getMarketBid());
-        ((MyViewHolder) viewHolder).mContent.setText(article.getAsset() + " (" + article.getLatest().getRoi().toString() + " )");
+        ArbiLine arbiLine = mArbiLinesList.get(i);
+        ((MyViewHolder) viewHolder).mTitle.setText(arbiLine.getMarketAsk() + " -> " + arbiLine.getMarketBid());
+        ((MyViewHolder) viewHolder).mContent.setText(arbiLine.getAsset() + " (" + arbiLine.getLatest().getRoi().toString() + " )");
     }
 
     @Override
     public int getItemCount() {
-        return mArticles.size();
+        return mArbiLinesList.size();
     }
 }
