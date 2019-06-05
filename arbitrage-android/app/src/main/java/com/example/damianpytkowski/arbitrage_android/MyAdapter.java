@@ -23,13 +23,13 @@ class MyAdapter extends RecyclerView.Adapter {
     // każdy obiekt tej klasy przechowuje odniesienie do layoutu elementu listy
     // dzięki temu wywołujemy findViewById() tylko raz dla każdego elementu
     private class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTitle;
-        public TextView mContent;
+        public TextView mAsk;
+        public TextView mRoi;
 
         public MyViewHolder(View pItem) {
             super(pItem);
-            mTitle = (TextView) pItem.findViewById(R.id.article_title);
-            mContent = (TextView) pItem.findViewById(R.id.article_subtitle);
+            mAsk = (TextView) pItem.findViewById(R.id.tvAsk);
+            mRoi = (TextView) pItem.findViewById(R.id.tvRoi);
         }
     }
 
@@ -78,8 +78,8 @@ class MyAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int i) {
         // uzupełniamy layout artykułu
         ArbiLine arbiLine = mArbiLinesList.get(i);
-        ((MyViewHolder) viewHolder).mTitle.setText(arbiLine.getMarketAsk() + " -> " + arbiLine.getMarketBid());
-        ((MyViewHolder) viewHolder).mContent.setText(arbiLine.getAsset() + " (" + arbiLine.getLatest().getRoi().toString() + " )");
+        ((MyViewHolder) viewHolder).mAsk.setText(arbiLine.getMarketAsk());
+        ((MyViewHolder) viewHolder).mRoi.setText(arbiLine.getAsset() + " (" + arbiLine.getLatest().getRoi().toString() + " )");
     }
 
     @Override
